@@ -54,11 +54,11 @@ def make_positions_table(data, cur, conn):
 
 def make_players_table(data, cur, conn):
     lstplayers = []
+    cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
     players = data["squad"]
     for each in players:
         id = each['id']
-        if id not in lstplayers:
-            lstplayers.append(id)
+        lstplayers.append(id)
 
         name = each['name']
         if name not in lstplayers:
@@ -68,44 +68,34 @@ def make_players_table(data, cur, conn):
         # print(pos)
         if pos == "Goalkeeper": 
             position_id = 0
-            if position_id not in lstplayers:
-                lstplayers.append(position_id)
+            lstplayers.append(position_id)
         if pos == "Defence": 
             position_id = 1
-            if position_id not in lstplayers:
-                lstplayers.append(position_id)
+            lstplayers.append(position_id)
         if pos == "Midfield": 
             position_id = 2
-            if position_id not in lstplayers:
-                lstplayers.append(position_id)
+            lstplayers.append(position_id)
         if pos == "Offence": 
             position_id = 3
-            if position_id not in lstplayers:
-                lstplayers.append(position_id)
+            lstplayers.append(position_id)
         if pos == "Forward": 
             position_id = 4
-            if position_id not in lstplayers:
-                lstplayers.append(position_id)
+            lstplayers.append(position_id)
 
         birthyr = each['dateOfBirth'][0:4]
         birthyear = int(birthyr)
-        if birthyear not in lstplayers:
-            lstplayers.append(birthyear)
+        lstplayers.append(birthyear)
 
         nationality = each['nationality'] 
-        if nationality not in lstplayers:
-            lstplayers.append(nationality)
-        # cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
+        lstplayers.append(nationality)
+        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(each["id"], each["name"], position_id, birthyear, each["nationality"]))
+    # for i in range(len(lstplayers)):
         # cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(id, name, position_id, birthyear, nationality))
-
-    # print(lstplayers)
-    cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
-    for i in range(len(lstplayers)):
-        # print(i)
-        print(lstplayers[i])
-        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(id, name, position_id, birthyear, nationality))
     conn.commit()
-    
+# json_data = read_data('football.json')
+# cur, conn = open_database('Football.db')
+# ptable = make_players_table(json_data, cur, conn)
+# print(ptable)
 
 ## [TASK 2]: 10 points
 # Finish the function nationality_search
