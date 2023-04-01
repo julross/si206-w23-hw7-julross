@@ -64,23 +64,25 @@ def make_players_table(data, cur, conn):
         if name not in lstplayers:
             lstplayers.append(name)
 
-        pos = each["position"]
-        # print(pos)
-        if pos == "Goalkeeper": 
-            position_id = 0
-            lstplayers.append(position_id)
-        if pos == "Defence": 
-            position_id = 1
-            lstplayers.append(position_id)
-        if pos == "Midfield": 
-            position_id = 2
-            lstplayers.append(position_id)
-        if pos == "Offence": 
-            position_id = 3
-            lstplayers.append(position_id)
-        if pos == "Forward": 
-            position_id = 4
-            lstplayers.append(position_id)
+        # pos = each["position"]
+        # # print(pos)
+        # if pos == "Goalkeeper": 
+        #     position_id = 0
+        #     lstplayers.append(position_id)
+        # if pos == "Defence": 
+        #     position_id = 1
+        #     lstplayers.append(position_id)
+        # if pos == "Midfield": 
+        #     position_id = 2
+        #     lstplayers.append(position_id)
+        # if pos == "Offence": 
+        #     position_id = 3
+        #     lstplayers.append(position_id)
+        # if pos == "Forward": 
+        #     position_id = 4
+        #     lstplayers.append(position_id)
+        newid = cur.execute("SELECT id FROM Positions")
+
 
         birthyr = each['dateOfBirth'][0:4]
         birthyear = int(birthyr)
@@ -88,7 +90,7 @@ def make_players_table(data, cur, conn):
 
         nationality = each['nationality'] 
         lstplayers.append(nationality)
-        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(each["id"], each["name"], position_id, birthyear, each["nationality"]))
+        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(each["id"], each["name"], newid, birthyear, each["nationality"]))
     # for i in range(len(lstplayers)):
         # cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(id, name, position_id, birthyear, nationality))
     conn.commit()
