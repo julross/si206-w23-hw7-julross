@@ -54,6 +54,7 @@ def make_positions_table(data, cur, conn):
 
 def make_players_table(data, cur, conn):
     lstplayers = []
+    cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
     players = data["squad"]
     for each in players:
         id = each['id']
@@ -93,11 +94,15 @@ def make_players_table(data, cur, conn):
         nationality = each['nationality'] 
         if nationality not in lstplayers:
             lstplayers.append(nationality)
+    # print(lstplayers)
+    # rows = []
+    # while lstplayers:
+    #     rows.append(lstplayers[:5])
+    #     lstplayers = lstplayers[5:]
     cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
-    for i in range(len(lstplayers)):
-        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(i, lstplayers[i], i, i, i))
+    for x in lstplayers:
+        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(id, name, position_id, birthyear, nationality))
     conn.commit()
-    #, lstplayers[i+1], lstplayers[i+2], lstplayers[i+3], lstplayers[i+4
     
 
 ## [TASK 2]: 10 points
