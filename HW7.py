@@ -53,6 +53,9 @@ def make_positions_table(data, cur, conn):
 #     created for you -- see make_positions_table above for details.
 
 def make_players_table(data, cur, conn):
+    # lstplayers = []
+    # for player in data:
+    #     lstplayers.
     pass
 
 ## [TASK 2]: 10 points
