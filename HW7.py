@@ -53,10 +53,52 @@ def make_positions_table(data, cur, conn):
 #     created for you -- see make_positions_table above for details.
 
 def make_players_table(data, cur, conn):
-    # lstplayers = []
-    # for player in data:
-    #     lstplayers.
-    pass
+    lstplayers = []
+    players = data["squad"]
+    for each in players:
+        id = each['id']
+        if id not in lstplayers:
+            lstplayers.append(id)
+
+        name = each['name']
+        if name not in lstplayers:
+            lstplayers.append(name)
+
+        for position in each['position']:
+            if position == "Goalkeeper": 
+                position_id = 0
+                if position_id not in lstplayers:
+                    lstplayers.append(position_id)
+            if position == "Defence": 
+                position_id = 1
+                if position_id not in lstplayers:
+                    lstplayers.append(position_id)
+            if position == "Midfield": 
+                position_id = 2
+                if position_id not in lstplayers:
+                    lstplayers.append(position_id)
+            if position == "Offence": 
+                position_id = 3
+                if position_id not in lstplayers:
+                    lstplayers.append(position_id)
+            if position == "Forward": 
+                position_id = 4
+                if position_id not in lstplayers:
+                    lstplayers.append(position_id)
+
+        birthyear = each['dateOfBirth'][0:4]
+        if birthyear not in lstplayers:
+            lstplayers.append(birthyear)
+
+        nationality = each['nationality'] 
+        if nationality not in lstplayers:
+            lstplayers.append(nationality)
+    cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
+    for i in range(len(lstplayers)):
+        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(i, lstplayers[i], i, i, i))
+    conn.commit()
+    #, lstplayers[i+1], lstplayers[i+2], lstplayers[i+3], lstplayers[i+4
+    
 
 ## [TASK 2]: 10 points
 # Finish the function nationality_search
