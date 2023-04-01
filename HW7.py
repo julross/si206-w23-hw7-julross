@@ -54,7 +54,6 @@ def make_positions_table(data, cur, conn):
 
 def make_players_table(data, cur, conn):
     lstplayers = []
-    cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
     players = data["squad"]
     for each in players:
         id = each['id']
@@ -65,42 +64,45 @@ def make_players_table(data, cur, conn):
         if name not in lstplayers:
             lstplayers.append(name)
 
-        for position in each['position']:
-            if position == "Goalkeeper": 
-                position_id = 0
-                if position_id not in lstplayers:
-                    lstplayers.append(position_id)
-            if position == "Defence": 
-                position_id = 1
-                if position_id not in lstplayers:
-                    lstplayers.append(position_id)
-            if position == "Midfield": 
-                position_id = 2
-                if position_id not in lstplayers:
-                    lstplayers.append(position_id)
-            if position == "Offence": 
-                position_id = 3
-                if position_id not in lstplayers:
-                    lstplayers.append(position_id)
-            if position == "Forward": 
-                position_id = 4
-                if position_id not in lstplayers:
-                    lstplayers.append(position_id)
+        pos = each["position"]
+        # print(pos)
+        if pos == "Goalkeeper": 
+            position_id = 0
+            if position_id not in lstplayers:
+                lstplayers.append(position_id)
+        if pos == "Defence": 
+            position_id = 1
+            if position_id not in lstplayers:
+                lstplayers.append(position_id)
+        if pos == "Midfield": 
+            position_id = 2
+            if position_id not in lstplayers:
+                lstplayers.append(position_id)
+        if pos == "Offence": 
+            position_id = 3
+            if position_id not in lstplayers:
+                lstplayers.append(position_id)
+        if pos == "Forward": 
+            position_id = 4
+            if position_id not in lstplayers:
+                lstplayers.append(position_id)
 
-        birthyear = each['dateOfBirth'][0:4]
+        birthyr = each['dateOfBirth'][0:4]
+        birthyear = int(birthyr)
         if birthyear not in lstplayers:
             lstplayers.append(birthyear)
 
         nationality = each['nationality'] 
         if nationality not in lstplayers:
             lstplayers.append(nationality)
+        # cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
+        # cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(id, name, position_id, birthyear, nationality))
+
     # print(lstplayers)
-    # rows = []
-    # while lstplayers:
-    #     rows.append(lstplayers[:5])
-    #     lstplayers = lstplayers[5:]
     cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
-    for x in lstplayers:
+    for i in range(len(lstplayers)):
+        # print(i)
+        print(lstplayers[i])
         cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(id, name, position_id, birthyear, nationality))
     conn.commit()
     
