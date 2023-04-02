@@ -53,51 +53,32 @@ def make_positions_table(data, cur, conn):
 #     created for you -- see make_positions_table above for details.
 
 def make_players_table(data, cur, conn):
-    lstplayers = []
-    cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER PRIMARY KEY, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT UNIQUE)")
+    cur.execute("CREATE TABLE IF NOT EXISTS Players (id INTEGER, name TEXT UNIQUE, position_id INTEGER, birthyear INTEGER, nationality TEXT)")
+    # print(data)
     players = data["squad"]
     for each in players:
-        id = each['id']
-        lstplayers.append(id)
-
-        name = each['name']
-        if name not in lstplayers:
-            lstplayers.append(name)
-
-        # pos = each["position"]
-        # # print(pos)
-        # if pos == "Goalkeeper": 
-        #     position_id = 0
-        #     lstplayers.append(position_id)
-        # if pos == "Defence": 
-        #     position_id = 1
-        #     lstplayers.append(position_id)
-        # if pos == "Midfield": 
-        #     position_id = 2
-        #     lstplayers.append(position_id)
-        # if pos == "Offence": 
-        #     position_id = 3
-        #     lstplayers.append(position_id)
-        # if pos == "Forward": 
-        #     position_id = 4
-        #     lstplayers.append(position_id)
-        newid = cur.execute("SELECT id FROM Positions")
-
-
-        birthyr = each['dateOfBirth'][0:4]
-        birthyear = int(birthyr)
-        lstplayers.append(birthyear)
-
-        nationality = each['nationality'] 
-        lstplayers.append(nationality)
-        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(each["id"], each["name"], newid, birthyear, each["nationality"]))
-    # for i in range(len(lstplayers)):
-        # cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(id, name, position_id, birthyear, nationality))
+        # print(each)
+        cur.execute("INSERT OR IGNORE INTO Players (id, name, position_id, birthyear, nationality) VALUES (?,?,?,?,?)",(each["id"], each["name"], each["position"], each["dateOfBirth"][0:4], each["nationality"]))
     conn.commit()
-# json_data = read_data('football.json')
-# cur, conn = open_database('Football.db')
-# ptable = make_players_table(json_data, cur, conn)
-# print(ptable)
+
+        # # # print(pos)
+        # # if pos == "Goalkeeper": 
+        # #     position_id = 0
+        # #     lstplayers.append(position_id)
+        # # if pos == "Defence": 
+        # #     position_id = 1
+        # #     lstplayers.append(position_id)
+        # # if pos == "Midfield": 
+        # #     position_id = 2
+        # #     lstplayers.append(position_id)
+        # # if pos == "Offence": 
+        # #     position_id = 3
+        # #     lstplayers.append(position_id)
+        # # if pos == "Forward": 
+        # #     position_id = 4
+        # #     lstplayers.append(position_id)
+        # newid = cur.execute("SELECT id FROM Positions")
+
 
 ## [TASK 2]: 10 points
 # Finish the function nationality_search
