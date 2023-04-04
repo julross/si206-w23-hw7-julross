@@ -78,6 +78,7 @@ def nationality_search(countries, cur, conn):
         for item in data:
             # print(item)
             lsttups.append(item)
+    conn.commit()
     return lsttups
 
 
@@ -98,15 +99,11 @@ def nationality_search(countries, cur, conn):
 
 
 def birthyear_nationality_search(age, country, cur, conn):
-    lsttups = []
+    by = 2023-age
     for player in country:
-        by = 2023-age
-        if age == by or age < by:
-            data = cur.execute("SELECT name, nationality, birthyear FROM Players WHERE Players.birthyear = ?",[player])
-        for item in data:
-            print(item)
-            lsttups.append(item)
-    return lsttups
+        data = cur.execute("SELECT name, nationality, birthyear FROM Players WHERE Players.nationality = ? AND Players.birthyear < ?",(country,by,)).fetchall()
+    conn.commit()
+    return data
 
 ## [TASK 4]: 15 points
 # finish the function position_birth_search
