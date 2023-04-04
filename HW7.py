@@ -2,7 +2,7 @@
 # Your name: Julianna Ross 
 # Your student id: 05267648 
 # Your email: julross@umich.edu 
-# List who you have worked with on this project:
+# List who you have worked with on this project: Meghan Levitt
 
 import unittest
 import sqlite3
@@ -72,7 +72,14 @@ def make_players_table(data, cur, conn):
         # the player's name, their position_id, and their nationality.
 
 def nationality_search(countries, cur, conn):
-    pass
+    lsttups = []
+    for each in countries:
+        data = cur.execute("SELECT name, position_id, nationality FROM Players WHERE Players.nationality = ?",[each])
+        for item in data:
+            # print(item)
+            lsttups.append(item)
+    return lsttups
+
 
 ## [TASK 3]: 10 points
 # finish the function birthyear_nationality_search
