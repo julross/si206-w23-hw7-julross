@@ -2,7 +2,7 @@
 # Your name: Julianna Ross 
 # Your student id: 05267648 
 # Your email: julross@umich.edu 
-# List who you have worked with on this project: Meghan Levitt
+# List who you have worked with on this project: Meghan Levitt, Claire Callen
 
 import unittest
 import sqlite3
@@ -124,13 +124,13 @@ def birthyear_nationality_search(age, country, cur, conn):
 
 def position_birth_search(position, age, cur, conn):
     by = 2023-age
-    # data = cur.execute("SELECT Players.name, Positions.position, Players.birthyear FROM Players JOIN Positions WHERE Positions.id = ? AND Players.birthyear < ?",(position, by,)).fetchall()
-    # data = cur.execute("SELECT name, position, birthyear FROM Players JOIN Positions WHERE Positions.position = ? AND Players.birthyear > ?",(position, by,)).fetchall()
-    data = cur.execute("SELECT name, position, birthyear FROM Players JOIN Positions WHERE Positions.position = ? AND Players.birthyear > ?",(position, by,)).fetchall()
-    print(data)
-    conn.commit()
-    return data
-
+    lstplayers = []
+    data = cur.execute("SELECT Players.name, Positions.position, Players.birthyear FROM Players JOIN Positions ON Players.position_id = Positions.id WHERE Positions.position = ?",(position,)).fetchall()
+    for player in data:
+        if player[-1] > by:
+            lstplayers.append(player)
+    conn.commit() 
+    return lstplayers
 
 # [EXTRA CREDIT]
 # You’ll make 3 new functions, make_winners_table(), make_seasons_table(),
